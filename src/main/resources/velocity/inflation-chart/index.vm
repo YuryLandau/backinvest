@@ -1,0 +1,24 @@
+#parse("/velocity/layout.vm")
+#@mainLayout()
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câmbio de Inflação</title>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <!-- Script personalizado -->
+    <script src="/js/index.js"></script>
+
+</head>
+
+<body>
+
+  <div id="root"></div>
+</body>
+
+</html>
+#end
