@@ -1,0 +1,35 @@
+#parse("/velocity/layout.vm")
+#@mainLayout()
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de gastos</title>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript" src="/js/graficoControle.js"></script>
+    <link rel="stylesheet" href="/css/graficoControle.css">
+
+</head>
+
+<body>
+
+    <div id="donutchart"></div>
+    <ul class="button-list">
+        <li><button class="rounded-pill m-1" onclick="updateLazerValor()">Lazer</button></li>
+        <li><button class="rounded-pill m-1" onclick="updateAlimentacaoValor()">Alimentação</button></li>
+        <li><button class="rounded-pill m-1" onclick="updateContasValor()">Contas</button></li>
+        <li><button class="rounded-pill m-1" onclick="updateRemediosValor()">Remédios</button></li>
+        <li><button class="rounded-pill m-1" onclick="updateAluguelValor()">Aluguel</button></li>
+    </ul>
+
+</body>
+
+</html>
+#end

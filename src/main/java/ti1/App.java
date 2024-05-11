@@ -14,6 +14,7 @@ import ti1.index.IndexController;
 import ti1.inflationChart.InflationChart;
 import ti1.personalRegistration.PersonalRegistrationController;
 import ti1.planningChart.PlanningChart;
+import ti1.spendingChart.SpendingChart;
 import ti1.utils.Filters;
 import ti1.utils.Path;
 import ti1.utils.ViewUtil;
@@ -45,6 +46,7 @@ public class App {
         get(Path.Web.CALENDAR, Calendar.serveCalendarPage);
         get(Path.Web.INFLATION_CHART, InflationChart.serveInflationChartPage);
         get(Path.Web.PLANNING_CHART, PlanningChart.servePlanningPage);
+        get(Path.Web.SPENDING_CHART, SpendingChart.serveSpendingChartPage);
         get("*", ViewUtil.notFound);
 
         // Set up after-filters (called after each get/post)
