@@ -11,6 +11,8 @@ public class Path {
         @Getter
         public static final String FINANCIAL_REGISTRATION = "/financial-registration/";
         @Getter
+        public static final String PERSONAL_REGISTRATION = "/personal-registration/";
+        @Getter
         public static final String LOGIN = "/login/";
         @Getter
         public static final String LOGOUT = "/logout/";
@@ -21,6 +23,7 @@ public class Path {
         public final static String HOME = "/velocity/index/index.vm";
         public final static String INDEX = "/velocity/index/index.vm";
         public final static String FINANCIAL_REGISTRATION = "/velocity/financial-registration/index.vm";
+        public final static String PERSONAL_REGISTRATION = "/velocity/personal-registration/index.vm";
         public static final String NOT_FOUND = "/velocity/notFound.vm";
     }
 }
