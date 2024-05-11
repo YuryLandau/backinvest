@@ -7,7 +7,7 @@ import static spark.Spark.port;
 import static spark.Spark.staticFiles;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
-import ti1.financial.FinancialController;
+import ti1.financialRegistration.FinancialRegistrationController;
 import ti1.index.IndexController;
 import ti1.utils.Filters;
 import ti1.utils.Path;
@@ -33,7 +33,8 @@ public class App {
 
         // Set up routes
         get(Path.Web.INDEX, IndexController.serveIndexPage);
-        get(Path.Web.FINANCIAL, FinancialController.serveFinancialPage);
+        get(Path.Web.HOME, IndexController.serveIndexPage);
+        get(Path.Web.FINANCIAL_REGISTRATION, FinancialRegistrationController.serveFinancialPage);
         get("*", ViewUtil.notFound);
 
         // Set up after-filters (called after each get/post)

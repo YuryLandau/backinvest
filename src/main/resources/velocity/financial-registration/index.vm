@@ -1,0 +1,76 @@
+#parse("/velocity/layout.vm")
+#@mainLayout()
+<html lang="pt-br">
+
+<head>
+    <title>Cadastro Financeiro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/cadastroFinanceiro.css">
+
+
+</head>
+
+<body>
+
+    <main>
+        <div class="resume">
+            <div>
+                Entradas: R$
+                <span class="incomes">0.00</span>
+            </div>
+            <div>
+                Saídas: R$
+                <span class="expenses">0.00</span>
+            </div>
+            <div>
+                Total: R$
+                <span class="total">0.00</span>
+            </div>
+        </div>
+        <div class="newItem">
+            <div class="divDesc">
+                <label for="desc">Descrição</label>
+                <input type="text" id="desc" />
+            </div>
+            <div class="divAmount">
+                <label for="amount">Valor</label>
+                <input type="number" id="amount" />
+            </div>
+            <div class="divType">
+                <label for="type">Tipo</label>
+                <select id="type">
+                    <option>Entrada</option>
+                    <option>Saída</option>
+                </select>
+            </div>
+            <button id="btnNew">Incluir</button>
+        </div>
+        <div class="divTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th class="columnAmount">Valor</th>
+                        <th class="columnType">Tipo</th>
+                        <th class="columnAction"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- Script personalizado -->
+    <script src="/js/cadastroFinanceiro.js"></script>
+</body>
+
+</html>
+#end
