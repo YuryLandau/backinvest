@@ -1,8 +1,6 @@
 #* @implicitly included *#
 #* @vtlvariable name="WebPath" type="ti1.utils.Path.Web" *#
 #* @vtlvariable name="msg" type="ti1.utils.MessageBundle" *#
-#* @vtlvariable name="books" type="java.lang.Iterable<ti1.book.Book>" *#
-#* @vtlvariable name="book" type="ti1.book.Book" *#
 #* @vtlvariable name="users" type="java.lang.Iterable<ti1.user.User>" *#
 #* @vtlvariable name="currentUser" type="java.lang.String" *#
 #* @vtlvariable name="loggedOut" type="java.lang.String" *#
