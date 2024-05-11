@@ -1,22 +1,37 @@
 #parse("/velocity/layout.vm")
 #@mainLayout()
-    <h1>$msg.get("INDEX_HEADING")</h1>
-    <h2>$msg.get("INDEX_REGISTERED_USERS", $users.size())</h2>
-    <ul>
-        #foreach($user in $users)
-            <li>$user</li>
-        #end
-    </ul>
-    <p>$msg.get("INDEX_PASSWORD_INFO")</p>
-    #if($book)
-    <h2>$msg.get("INDEX_BOOK_OF_THE_DAY_TEXT")</h2>
-    <div class="row row-2">
-            <div class="col">
-                <a href="$WebPath.getBOOKS()$book.getIsbn()">$msg.get("INDEX_BOOK_OF_THE_DAY_LINK", $book.getTitle(), $book.getAuthor())</a>
-            </div>
-            <div class="col">
-                <img src="$book.getLargeCover()" alt="$book.getTitle()">
-            </div>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestPro</title>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <!-- Script personalizado -->
+    <script src="/js/index.js"></script>
+
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h5></h5> <!---AQUI PODE COLOCAR UM TEXTO--->
+            <h4>PUC MG - Gestão Financeira</h4>
+            <h1>INVEST<span class="pro">PRO</span></h1>
+            <p>Este projeto foi concebido com o objetivo de simplificar a gestão financeira, <b>especialmente para
+                    aqueles que têm menos experiência nessa área.</b></p>
         </div>
-    #end
+
+        <div class="vetor1-img">
+            <img src="/img/Vetores/Revenue-bro.png">
+        </div>
+    </section>
+
+</body>
+
+</html>
 #end
