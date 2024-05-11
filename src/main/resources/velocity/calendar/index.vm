@@ -1,0 +1,77 @@
+#parse("/velocity/layout.vm")
+#@mainLayout()
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário</title>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+    <link rel="stylesheet" type="text/css" href="/css/calendario.css">
+
+</head>
+
+<body>
+
+    <div class="calendar">
+        <h1>Calendário de Gastos</h1>
+        <label for="month-select">Selecione o Mês: </label>
+        <select id="month-select">
+            <option value="0">Janeiro</option>
+            <option value="1">Fevereiro</option>
+            <option value="2">Março</option>
+            <option value="3">Abril</option>
+            <option value="4">Maio</option>
+            <option value="5">Junho</option>
+            <option value="6">Julho</option>
+            <option value="7">Agosto</option>
+            <option value="8">Setembro</option>
+            <option value="9">Outubro</option>
+            <option value="10">Novembro</option>
+            <option value="11">Dezembro</option>
+        </select>
+        <label for="expense-select">Selecione o Tipo de Gasto: </label>
+        <select id="expense-select">
+            <option value="lazer">Lazer</option>
+            <option value="medico">Médico</option>
+            <option value="comida">Comida</option>
+            <option value="automovel">Automóvel</option>
+            <option value="casa">Casa</option>
+        </select>
+        <input type="text" id="expense-description" placeholder="Descrição do gasto">
+        <input type="number" id="expense-amount" placeholder="Valor do gasto">
+        <button id="add-expense">Adicionar Gasto</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Domingo</th>
+                    <th>Segunda</th>
+                    <th>Terça</th>
+                    <th>Quarta</th>
+                    <th>Quinta</th>
+                    <th>Sexta</th>
+                    <th>Sábado</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+        <div id="total-expenses">Total gasto este mês: R$ 0.00</div>
+        <div id="expense-totals">
+            <h2>Total de Gastos por Tipo</h2>
+            <div id="lazer-total">Lazer: R$ 0.00</div>
+            <div id="medico-total">Médico: R$ 0.00</div>
+            <div id="comida-total">Comida: R$ 0.00</div>
+            <div id="automovel-total">Automóvel: R$ 0.00</div>
+            <div id="casa-total">Casa: R$ 0.00</div>
+        </div>
+
+        <canvas id="expense-chart" width="400" height="400"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/calendario.js"></script>
+</body>
+
+</html>
+#end

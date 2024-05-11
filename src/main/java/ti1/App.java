@@ -8,6 +8,7 @@ import static spark.Spark.staticFiles;
 import static spark.debug.DebugScreen.enableDebugScreen;
 
 import ti1.calculator.Calculator;
+import ti1.calendar.Calendar;
 import ti1.financialRegistration.FinancialRegistrationController;
 import ti1.index.IndexController;
 import ti1.personalRegistration.PersonalRegistrationController;
@@ -39,6 +40,7 @@ public class App {
         get(Path.Web.FINANCIAL_REGISTRATION, FinancialRegistrationController.serveFinancialPage);
         get(Path.Web.PERSONAL_REGISTRATION, PersonalRegistrationController.serveRegistrationPage);
         get(Path.Web.CALCULATOR, Calculator.serveCalculatorPage);
+        get(Path.Web.CALENDAR, Calendar.serveCalendarPage);
         get("*", ViewUtil.notFound);
 
         // Set up after-filters (called after each get/post)
