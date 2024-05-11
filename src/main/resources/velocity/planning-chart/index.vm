@@ -1,0 +1,37 @@
+#parse("/velocity/layout.vm")
+#@mainLayout()
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de planejamento</title>
+
+    <div class="cursor-dot" data-cursor-dot></div>
+    <div class="cursor-outline" data-cursor-outline></div>
+
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="/css/planejamentoGastos.css">
+
+    <!-- Script personalizado -->
+    <script src="/js/planejamentoGastos.js"></script>
+</head>
+
+<body>
+
+    <button onclick="inserirValoresProximoMes()">Planejar quanto deseja gastar no próximo mês</button>
+    <br>
+    <br>
+    <button onclick="alterarLazerGastos()">Inserir gasto com lazer</button>
+    <button onclick="alterarAlimentacaoGastos()">Inserir gasto com alimentação</button>
+    <button onclick="alterarContasGastos()">Inserir gasto com contas</button>
+    <button onclick="alterarRemediosGastos()">Inserir gasto com remédios</button>
+    <button onclick="alterarAluguelGastos()">Inserir gasto com aluguel</button>
+
+    <div id="chart_div"></div>
+
+</body>
+
+</html>
+#end

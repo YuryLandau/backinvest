@@ -19,6 +19,8 @@ public class Path {
         @Getter
         public static final String CALENDAR = "/calendar/";
         @Getter
+        public static final String PLANNING_CHART = "/planning-chart/";
+        @Getter
         public static final String LOGIN = "/login/";
         @Getter
         public static final String LOGOUT = "/logout/";
@@ -33,6 +35,7 @@ public class Path {
         public final static String CALENDAR = "/velocity/calendar/index.vm";
         public final static String INFLATION_CHART = "/velocity/inflation-chart/index.vm";
         public final static String CALCULATOR = "/velocity/calculator/index.vm";
+        public final static String PLANNING_CHART = "/velocity/planning-chart/index.vm";
         public static final String NOT_FOUND = "/velocity/notFound.vm";
     }
 }
