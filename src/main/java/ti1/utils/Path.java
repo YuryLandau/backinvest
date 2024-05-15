@@ -23,7 +23,9 @@ public class Path {
         @Getter
         public static final String SPENDING_CHART = "/spending-chart/";
         @Getter
-        public static final String LOGIN = "/login/";
+        public static final String LOGIN = "/personal-login/";
+        @Getter
+        public static final String PERSONAL_LOGIN = "/personal-login/";
         @Getter
         public static final String LOGOUT = "/logout/";
 
@@ -39,6 +41,8 @@ public class Path {
         public final static String CALCULATOR = "/velocity/calculator/index.html";
         public final static String PLANNING_CHART = "/velocity/planning-chart/index.html";
         public final static String SPENDING_CHART = "/velocity/spending-chart/index.html";
+        public final static String LOGIN = "/velocity/personal-login/index.html";
+        public final static String PERSONAL_LOGIN = "/velocity/personal-login/index.html";
         public static final String NOT_FOUND = "/velocity/notFound.html";
     }
 }
