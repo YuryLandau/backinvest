@@ -3,10 +3,21 @@ package ti1;
 import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.get;
+import static spark.Spark.path;
 import static spark.Spark.port;
+import static spark.Spark.post;
 import static spark.Spark.staticFiles;
-import static spark.debug.DebugScreen.enableDebugScreen;
 
+import java.sql.Connection;
+import java.util.List;
+
+import com.google.gson.Gson;
+
+import model.Blog;
+import services.DBFunctions;
+import services.JsonTransformer;
+import spark.ResponseTransformer;
+import spark.Route;
 import ti1.calculator.Calculator;
 import ti1.calendar.Calendar;
 import ti1.financialRegistration.FinancialRegistrationController;
@@ -17,7 +28,14 @@ import ti1.planningChart.PlanningChart;
 import ti1.spendingChart.SpendingChart;
 import ti1.utils.Filters;
 import ti1.utils.Path;
-import ti1.utils.ViewUtil;
+
+class HelloWorldResponse {
+    public String message = "Hello Worldss";
+}
+
+class BlogPostResponse {
+    public Blog blog;
+}
 
 /**
  * Hello world!
@@ -31,7 +49,19 @@ public class App {
         port(4567);
         staticFiles.location("/public");
         staticFiles.expireTime(600L);
-        enableDebugScreen();
+
+        // Set up DB
+        DBFunctions db = new DBFunctions();
+        Connection conn = db.conect_to_db("postgres", "postgres", "Senha@123");
+
+        // db.create_table(conn, "blog");
+        // db.insert_data(conn, "blog", "Mais linhas", "Landau", "Tudo sobre uma nova
+        // linha");
+        // db.read_all_data(conn, "blog");
+        // db.update_data(conn, 2, "blog", "Linha atualizada", "Landau 2", "New
+        // contnt");
+        db.search_by_id(conn, "blog", "3");
+        // db.delete_data_by_author(conn, "blog", "Landau 2");
 
         // Set up before-filters (called before each get/post)
         before("*", Filters.addTrailingSlashes);
@@ -47,10 +77,58 @@ public class App {
         get(Path.Web.INFLATION_CHART, InflationChart.serveInflationChartPage);
         get(Path.Web.PLANNING_CHART, PlanningChart.servePlanningPage);
         get(Path.Web.SPENDING_CHART, SpendingChart.serveSpendingChartPage);
-        get("*", ViewUtil.notFound);
+        // get("*", ViewUtil.notFound);
 
         // Set up after-filters (called after each get/post)
         after("*", Filters.addGzipHeader);
 
+        // Set up JSON transformer
+        ResponseTransformer jsonTransformer = new JsonTransformer();
+
+        // Set up API routes
+        before("/*", (q, a) -> System.out.print("Received api call"));
+        path("/api/", () -> {
+            get("/posts/", servePostsApi, jsonTransformer);
+            get("/posts/:id/", servePostByIdApi, jsonTransformer);
+
+            post("/posts/", (req, res) -> {
+                String post = req.body();
+                Blog blog = new Gson().fromJson(post, Blog.class);
+
+                if (blog.title.isEmpty() || blog.author.isEmpty() || blog.content.isEmpty()) {
+                    res.status(400);
+                    return "Error: title, author and content are required.";
+                }
+
+                db.insert_data(conn, "blog", blog.title, blog.author, blog.content);
+
+                return "Post Created";
+            }, jsonTransformer);
+        });
+
     }
+
+    private static Route servePostsApi = (request, response) -> {
+        DBFunctions dbFunctions = new DBFunctions();
+        Connection conn = dbFunctions.conect_to_db("postgres", "postgres", "Senha@123");
+
+        String tableName = "blog";
+        List<Blog> posts = dbFunctions.read_all_data(conn, tableName);
+
+        response.type("application/json");
+        return posts;
+    };
+
+    private static Route servePostByIdApi = (request, response) -> {
+        DBFunctions dbFunctions = new DBFunctions();
+        Connection conn = dbFunctions.conect_to_db("postgres", "postgres", "Senha@123");
+
+        String tableName = "blog";
+        String id = request.params(":id");
+        Blog post = dbFunctions.search_by_id(conn, tableName, id);
+
+        response.type("application/json");
+        return post;
+    };
+
 }
