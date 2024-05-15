@@ -14,6 +14,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import model.Blog;
+import model.User;
 import services.DBFunctions;
 import services.JsonTransformer;
 import spark.ResponseTransformer;
@@ -43,6 +44,12 @@ class BlogPostResponse {
  */
 public class App {
 
+    private static final String dbname = "postgres";
+
+    private static final String username = "postgres";
+
+    private static final String password = "Senha@123";
+
     public static void main(String[] args) {
 
         // Configure Spark
@@ -52,15 +59,16 @@ public class App {
 
         // Set up DB
         DBFunctions db = new DBFunctions();
-        Connection conn = db.conect_to_db("postgres", "postgres", "Senha@123");
+        Connection conn = db.conect_to_db(dbname, username, password);
 
         // db.create_table(conn, "blog");
+        db.create_user_table(conn);
         // db.insert_data(conn, "blog", "Mais linhas", "Landau", "Tudo sobre uma nova
         // linha");
         // db.read_all_data(conn, "blog");
         // db.update_data(conn, 2, "blog", "Linha atualizada", "Landau 2", "New
         // contnt");
-        db.search_by_id(conn, "blog", "3");
+        // db.search_by_id(conn, "blog", "3");
         // db.delete_data_by_author(conn, "blog", "Landau 2");
 
         // Set up before-filters (called before each get/post)
@@ -90,27 +98,18 @@ public class App {
         path("/api/", () -> {
             get("/posts/", servePostsApi, jsonTransformer);
             get("/posts/:id/", servePostByIdApi, jsonTransformer);
+            post("/posts/", createPost, jsonTransformer);
 
-            post("/posts/", (req, res) -> {
-                String post = req.body();
-                Blog blog = new Gson().fromJson(post, Blog.class);
-
-                if (blog.title.isEmpty() || blog.author.isEmpty() || blog.content.isEmpty()) {
-                    res.status(400);
-                    return "Error: title, author and content are required.";
-                }
-
-                db.insert_data(conn, "blog", blog.title, blog.author, blog.content);
-
-                return "Post Created";
-            }, jsonTransformer);
+            // Autenticação
+            post("/login/", getUser, jsonTransformer);
+            post("/users/", createUser, jsonTransformer);
         });
 
     }
 
     private static Route servePostsApi = (request, response) -> {
         DBFunctions dbFunctions = new DBFunctions();
-        Connection conn = dbFunctions.conect_to_db("postgres", "postgres", "Senha@123");
+        Connection conn = dbFunctions.conect_to_db(dbname, username, password);
 
         String tableName = "blog";
         List<Blog> posts = dbFunctions.read_all_data(conn, tableName);
@@ -121,7 +120,7 @@ public class App {
 
     private static Route servePostByIdApi = (request, response) -> {
         DBFunctions dbFunctions = new DBFunctions();
-        Connection conn = dbFunctions.conect_to_db("postgres", "postgres", "Senha@123");
+        Connection conn = dbFunctions.conect_to_db(dbname, username, password);
 
         String tableName = "blog";
         String id = request.params(":id");
@@ -129,6 +128,58 @@ public class App {
 
         response.type("application/json");
         return post;
+    };
+
+    private static Route createPost = (req, res) -> {
+
+        DBFunctions dbFunctions = new DBFunctions();
+        Connection conn = dbFunctions.conect_to_db(dbname, username, password);
+        String post = req.body();
+        Blog blog = new Gson().fromJson(post, Blog.class);
+
+        if (blog.title.isEmpty() || blog.author.isEmpty() || blog.content.isEmpty()) {
+            res.status(400);
+            return "Error: title, author and content are required.";
+        }
+
+        dbFunctions.insert_data(conn, "blog", blog.title, blog.author, blog.content);
+
+        return "Post Created";
+    };
+
+    private static Route createUser = (request, response) -> {
+        DBFunctions dbFunctions = new DBFunctions();
+        Connection conn = dbFunctions.conect_to_db(dbname, username, password);
+
+        String post = request.body();
+        User user = new Gson().fromJson(post, User.class);
+        if (user.getFirstname().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
+            response.status(400);
+            return "Error: name, email and password are required.";
+        }
+        ;
+        dbFunctions.create_user(conn, user.getFirstname(), user.getLastname(), user.getCpf(), user.getPassword(),
+                user.getEmail(), user.isAcept());
+
+        return "User Created";
+    };
+
+    private static Route getUser = (request, response) -> {
+        DBFunctions dbFunctions = new DBFunctions();
+        Connection conn = dbFunctions.conect_to_db(dbname, username, password);
+        String post = request.body();
+        User userInput = new Gson().fromJson(post, User.class);
+        if (userInput.getEmail().isEmpty() || userInput.getPassword().isEmpty()) {
+            response.status(400);
+            return "Error: name, email and password are required.";
+        }
+        ;
+        User user = dbFunctions.authenticate_user(conn, userInput.getEmail(), userInput.getPassword());
+
+        response.type("application/json");
+
+        System.out.println("Usuário autenticado");
+        return user;
     };
 
 }
