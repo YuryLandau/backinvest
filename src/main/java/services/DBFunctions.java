@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Blog;
+import model.User;
 
 public class DBFunctions {
     public Connection conect_to_db(String dbname, String username, String password) {
@@ -51,6 +52,79 @@ public class DBFunctions {
             System.out.println(e);
             e.printStackTrace();
         }
+    }
+
+    public void create_user_table(Connection conn) {
+        Statement stmt = null;
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, firstname varchar(200), lastname varchar(200), cpf varchar(200), password varchar(200), email varchar(200), acept boolean)";
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            System.out.println("Table users created successfully.");
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
+
+    public void create_user(Connection conn, String firstname, String lastname, String cpf, String password,
+            String email,
+            boolean acept) {
+        Statement stmt = null;
+        try {
+            String query = String.format(
+                    "INSERT INTO users(firstname, lastname, cpf, password, email, acept) VALUES('%s', '%s', '%s', '%s', '%s', %s);",
+                    firstname, lastname, cpf, password, email, acept);
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            System.out.println("User created successfully.");
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
+
+    public boolean check_user_exists(Connection conn, String email) {
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            String query = String.format("SELECT * FROM users WHERE email='%s';", email);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public User authenticate_user(Connection conn, String email, String password) {
+        User user = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            String query = String.format("SELECT * FROM users WHERE email='%s' AND password='%s';", email, password);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            if (rs.next()) {
+                String id = rs.getString("id");
+                String firstname = rs.getString("firstname");
+                String lastname = rs.getString("lastname");
+                String cpf = rs.getString("cpf");
+                Boolean acept = rs.getBoolean("acept");
+
+                user = new User(id, "", email, firstname, lastname, cpf, acept);
+            }
+            return user;
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+        return user;
     }
 
     public void insert_data(Connection conn, String table_name, String title, String author, String content) {
