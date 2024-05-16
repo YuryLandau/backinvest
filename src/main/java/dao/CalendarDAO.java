@@ -70,6 +70,31 @@ public class CalendarDAO extends DAO {
         return events;
     }
 
+    public List<CalendarEventModel> get_user_calendar_events(String user_id){
+        List<CalendarEventModel> events = new ArrayList<>();
+        try {
+            String query = String.format("SELECT * FROM %s WHERE user_id='%s';", table_name, user_id);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            System.out.println("Data read successfully.");
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String date = rs.getString("date");
+                String spending_type = rs.getString("spending_type");
+                String description = rs.getString("description");
+
+                CalendarEventModel event = new CalendarEventModel(id, user_id, date, spending_type, description);
+                events.add(event);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+        return events;
+    }
+
     public void create_calendar_table() {
         try {
             String query = "CREATE TABLE IF NOT EXISTS calendar (id VARCHAR(255), user_id VARCHAR(255), date VARCHAR(255), spending_type VARCHAR(255), description VARCHAR(255));";
