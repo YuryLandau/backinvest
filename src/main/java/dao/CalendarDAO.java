@@ -75,6 +75,7 @@ public class CalendarDAO extends DAO {
             String query = "CREATE TABLE IF NOT EXISTS calendar (id VARCHAR(255), user_id VARCHAR(255), date VARCHAR(255), spending_type VARCHAR(255), description VARCHAR(255));";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
+            System.out.println("Table calendar created successfully.");
         } catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
