@@ -15,8 +15,10 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import dao.CalendarDAO;
+import dao.InvestimentHistoryDAO;
 import dao.UserDAO;
 import model.CalendarEventModel;
+import model.InvestmentHistoryModel;
 import model.UserModel;
 
 import services.JsonTransformer;
@@ -41,21 +43,18 @@ import ti1.utils.Path;
 public class App {
     public static void main(String[] args) {
         UserDAO userDAO = new UserDAO();
+        CalendarDAO calendarDAO = new CalendarDAO();
+        InvestimentHistoryDAO investimentHistoryDAO = new InvestimentHistoryDAO();
 
         // Configure Spark
         port(4567);
         staticFiles.location("/public");
         staticFiles.expireTime(600L);
 
-        // db.create_table(conn, "blog");
+        // Set up tables
         userDAO.create_user_table();
-        // db.insert_data(conn, "blog", "Mais linhas", "Landau", "Tudo sobre uma nova
-        // linha");
-        // db.read_all_data(conn, "blog");
-        // db.update_data(conn, 2, "blog", "Linha atualizada", "Landau 2", "New
-        // contnt");
-        // db.search_by_id(conn, "blog", "3");
-        // db.delete_data_by_author(conn, "blog", "Landau 2");
+        calendarDAO.create_calendar_table();
+        investimentHistoryDAO.create_investiment_history_table();
 
         // Set up before-filters (called before each get/post)
         before("*", Filters.addTrailingSlashes);
@@ -98,17 +97,50 @@ public class App {
             get("/calendar/search/", searchAllCalendarEventRoute, jsonTransformer);
             get("/calendar/search/:id", searchCalendarEventRoute, jsonTransformer);
             
-            // // Investimentos
-            // post("/investments/create/", createInvestmentRoute, jsonTransformer);
-            // post("/investments/update/", updateInvestmentRoute, jsonTransformer);
-            // post("/investments/delete/", deleteInvestmentRoute, jsonTransformer);
-            // post("/investments/search/", searchInvestmentRoute, jsonTransformer);
-            // post("/investments/search/by-id/", searchInvestmentByIdRoute, jsonTransformer);
-            // post("/investments/search/by-user/", searchInvestmentByUserRoute, jsonTransformer);
+            // Investimentos
+            post("/investments/create/", createInvestmentRoute, jsonTransformer);
+            put("/investments/update/", updateInvestmentRoute, jsonTransformer);
+            delete("/investments/delete/", deleteInvestmentRoute, jsonTransformer);
+            get("/investments/search/", searchAllInvestimentRoute, jsonTransformer);
+            get("/investments/search/:id", searchInvestmentRoute, jsonTransformer);
 
         
         });
     }
+
+    public static Route createInvestmentRoute = (request, response) -> {
+        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
+        String post = request.body();
+        InvestmentHistoryModel investment = new Gson().fromJson(post, InvestmentHistoryModel.class);
+        investiment.insert_investiment_history(investment);
+        return "Investiment Created";
+    };
+
+    public static Route searchInvestmentRoute = (request, response) -> {
+        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
+        String id = request.params("id");
+        return investiment.get_investiment_history(id);
+    };
+
+    public static Route searchAllInvestimentRoute = (request, response) -> {
+        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
+        return investiment.get_all_investiment_history();
+    };
+
+    public static Route updateInvestmentRoute = (request, response) -> {
+        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
+        String post = request.body();
+        InvestmentHistoryModel investment = new Gson().fromJson(post, InvestmentHistoryModel.class);
+        investiment.update_investiment_history(investment);
+        return "Investiment Updated";
+    };
+
+    public static Route deleteInvestmentRoute = (request, response) -> {
+        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
+        String id = request.params("id");
+        investiment.delete_investiment_history(id);
+        return "Investiment Deleted";
+    };
 
     public static Route createCalendarEventRoute = (request, response) -> {
         CalendarDAO calendar = new CalendarDAO();
