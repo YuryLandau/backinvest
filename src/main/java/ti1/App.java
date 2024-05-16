@@ -10,9 +10,13 @@ import static spark.Spark.put;
 import static spark.Spark.delete;
 import static spark.Spark.staticFiles;
 
+import java.util.List;
+
 import com.google.gson.Gson;
 
+import dao.CalendarDAO;
 import dao.UserDAO;
+import model.CalendarEventModel;
 import model.UserModel;
 
 import services.JsonTransformer;
@@ -87,13 +91,13 @@ public class App {
             put("/users/update/", updateUserRoute, jsonTransformer);
             delete("/users/delete/", deleteUserRoute, jsonTransformer);
             
-            // // Calendário
-            // post("/calendar/create/", createCalendarEventRoute, jsonTransformer);
-            // post("/calendar/update/", updateCalendarEventRoute, jsonTransformer);
-            // post("/calendar/delete/", deleteCalendarEventRoute, jsonTransformer);
-            // post("/calendar/search/", searchCalendarEventRoute, jsonTransformer);
-            // post("/calendar/search/by-date/", searchCalendarEventByDateRoute, jsonTransformer);
-
+            // Calendário
+            post("/calendar/create/", createCalendarEventRoute, jsonTransformer);
+            put("/calendar/update/", updateCalendarEventRoute, jsonTransformer);
+            delete("/calendar/delete/", deleteCalendarEventRoute, jsonTransformer);
+            get("/calendar/search/", searchAllCalendarEventRoute, jsonTransformer);
+            get("/calendar/search/:id", searchCalendarEventRoute, jsonTransformer);
+            
             // // Investimentos
             // post("/investments/create/", createInvestmentRoute, jsonTransformer);
             // post("/investments/update/", updateInvestmentRoute, jsonTransformer);
@@ -105,6 +109,43 @@ public class App {
         
         });
     }
+
+    public static Route createCalendarEventRoute = (request, response) -> {
+        CalendarDAO calendar = new CalendarDAO();
+        String post = request.body();
+        CalendarEventModel calendarEvent = new Gson().fromJson(post, CalendarEventModel.class);
+        calendar.insert_calendar_event(calendarEvent);
+        return "Calendar Event Created";
+    };
+
+    public static Route updateCalendarEventRoute = (request, response) -> {
+        CalendarDAO calendar = new CalendarDAO();
+        String post = request.body();
+        CalendarEventModel calendarEvent = new Gson().fromJson(post, CalendarEventModel.class);
+        calendar.update_calendar_event(calendarEvent);
+        return "Calendar Event Updated";
+    };
+
+    public static Route deleteCalendarEventRoute = (request, response) -> {
+        CalendarDAO calendar = new CalendarDAO();
+        String post = request.body();
+        CalendarEventModel calendarEvent = new Gson().fromJson(post, CalendarEventModel.class);
+        calendar.delete_calendar_event(calendarEvent.getId());
+        return "Calendar Event Deleted";
+    };
+
+    public static Route searchCalendarEventRoute = (request, response) -> {
+        CalendarDAO calendar = new CalendarDAO();
+        String id = request.params("id");
+        CalendarEventModel calendarEvent = calendar.get_calendar_event(id);
+        return calendarEvent;
+    };
+
+    public static Route searchAllCalendarEventRoute = (request, response) -> {
+        CalendarDAO calendar = new CalendarDAO();
+        List<CalendarEventModel> calendarEvents = calendar.get_all_calendar_events();
+        return calendarEvents;
+    };
 
     private static Route deleteUserRoute = (request, response) -> {
         UserDAO userDAO = new UserDAO();
