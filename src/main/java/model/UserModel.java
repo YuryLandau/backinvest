@@ -1,24 +1,34 @@
 package model;
 
-public class User {
+public class UserModel {
     private String id;
     private String password;
     private String email;
     private String firstname;
     private String lastname;
     private String cpf;
-    private boolean acept;
+    private boolean accept;
 
-    public User(String id, String password, String email, String firstname, String lastname,
+    public UserModel() {
+		this.id = null;
+        this.password = null;
+        this.email = null;
+        this.firstname = null;
+        this.lastname = null;
+        this.cpf = null;
+        this.accept = false;
+	}
+
+    public UserModel(String id, String password, String email, String firstname, String lastname,
             String cpf,
-            boolean acept) {
+            boolean accept) {
         this.id = id;
         this.password = password;
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
         this.cpf = cpf;
-        this.acept = acept;
+        this.accept = accept;
     }
 
     public String getId() {
@@ -69,11 +79,11 @@ public class User {
         this.cpf = cpf;
     }
 
-    public boolean isAcept() {
-        return acept;
+    public boolean isAccept() {
+        return accept;
     }
 
-    public void setAcept(boolean acept) {
-        this.acept = acept;
+    public void setAccept(boolean accept) {
+        this.accept = accept;
     }
 }
