@@ -23,7 +23,7 @@ public class InvestimentHistoryDAO extends DAO{
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            String query = "CREATE TABLE IF NOT EXISTS investiment_history (id serial PRIMARY KEY, user_id TEXT, date TEXT, spending_type TEXT, description TEXT)";
+            String query = "CREATE TABLE IF NOT EXISTS investiment_history (id serial PRIMARY KEY, user_id TEXT, date TEXT, start_value REAL, final_value REAL, monthly_income REAL, number_of_months INTEGER);";
             stmt.executeUpdate(query);
             System.out.println("Table investiment_history created successfully.");
         } catch (Exception e) {
@@ -45,10 +45,10 @@ public class InvestimentHistoryDAO extends DAO{
                 String id = rs.getString("id");
                 String user_id = rs.getString("user_id");
                 String date = rs.getString("date");
-                Number start_value = rs.getFloat("start_value");
-                Number end_value = rs.getFloat("end_value");
-                Number monthly_income = rs.getFloat("monthly_income");
-                Number number_of_months = rs.getFloat("number_of_months");
+                Number start_value = rs.getDouble("start_value");
+                Number end_value = rs.getDouble("end_value");
+                Number monthly_income = rs.getDouble("monthly_income");
+                Number number_of_months = rs.getInt("number_of_months");
                 
                 InvestmentHistoryModel user = new InvestmentHistoryModel(id, user_id, date, start_value, end_value, monthly_income, number_of_months);
                 investiment_history.add(user);
@@ -74,10 +74,10 @@ public class InvestimentHistoryDAO extends DAO{
             while (rs.next()) {
                 String id = rs.getString("id");
                 String date = rs.getString("date");
-                Number start_value = rs.getFloat("start_value");
-                Number end_value = rs.getFloat("end_value");
-                Number monthly_income = rs.getFloat("monthly_income");
-                Number number_of_months = rs.getFloat("number_of_months");
+                Number start_value = rs.getDouble("start_value");
+                Number end_value = rs.getDouble("end_value");
+                Number monthly_income = rs.getDouble("monthly_income");
+                Number number_of_months = rs.getInt("number_of_months");
                 
                 InvestmentHistoryModel investiment = new InvestmentHistoryModel(id, user_id, date, start_value, end_value, monthly_income, number_of_months);
                 investiment_history.add(investiment);
@@ -119,7 +119,7 @@ public class InvestimentHistoryDAO extends DAO{
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            String query = String.format("INSERT INTO %s (user_id, date, start_value, end_value, monthly_income, number_of_months) VALUES ('%s', '%s', %f, %f, %f, %f);", table_name, investiment_history.getUser_id(), investiment_history.getDate(), investiment_history.getStart_value(), investiment_history.getFinal_value(), investiment_history.getMonthly_income(), investiment_history.getNumber_of_months());
+            String query = String.format("INSERT INTO %s (user_id, date, start_value, final_value, monthly_income, number_of_months) VALUES ('%s', '%s', %s, %s, %s, %s);", table_name, investiment_history.getUser_id(), investiment_history.getDate(), investiment_history.getStart_value(), investiment_history.getFinal_value(), investiment_history.getMonthly_income(), investiment_history.getNumber_of_months());
             stmt.executeUpdate(query);
             System.out.println("Investiment History inserted successfully.");
         } catch (Exception e) {
