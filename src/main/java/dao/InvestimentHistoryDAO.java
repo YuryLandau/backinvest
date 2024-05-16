@@ -23,7 +23,7 @@ public class InvestimentHistoryDAO extends DAO{
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            String query = "CREATE TABLE IF NOT EXISTS investiment_history (id INTEGER PRIMARY KEY, user_id TEXT, date TEXT, spending_type TEXT, description TEXT)";
+            String query = "CREATE TABLE IF NOT EXISTS investiment_history (id serial PRIMARY KEY, user_id TEXT, date TEXT, spending_type TEXT, description TEXT)";
             stmt.executeUpdate(query);
             System.out.println("Table investiment_history created successfully.");
         } catch (Exception e) {

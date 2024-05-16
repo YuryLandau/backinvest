@@ -97,7 +97,7 @@ public class CalendarDAO extends DAO {
 
     public void create_calendar_table() {
         try {
-            String query = "CREATE TABLE IF NOT EXISTS calendar (id VARCHAR(255), user_id VARCHAR(255), date VARCHAR(255), spending_type VARCHAR(255), description VARCHAR(255));";
+            String query = "CREATE TABLE IF NOT EXISTS calendar (id serial PRIMARY KEY, user_id VARCHAR(255), date VARCHAR(255), spending_type VARCHAR(255), description VARCHAR(255));";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
             System.out.println("Table calendar created successfully.");
@@ -109,7 +109,7 @@ public class CalendarDAO extends DAO {
 
     public void insert_calendar_event(CalendarEventModel event) {
         try {
-            String query = String.format("INSERT INTO %s (id, user_id, date, spending_type, description) VALUES ('%s', '%s', '%s', '%s', '%s');", table_name, event.getId(), event.getUser_id(), event.getDate(), event.getSpending_type(), event.getDescription());
+            String query = String.format("INSERT INTO %s ( user_id, date, spending_type, description) VALUES ('%s', '%s', '%s', '%s');", table_name, event.getUser_id(), event.getDate(), event.getSpending_type(), event.getDescription());
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
         } catch (Exception e) {
