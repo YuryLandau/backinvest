@@ -89,6 +89,8 @@ public class App {
             post("/users/registration/", createUserRoute, jsonTransformer);
             put("/users/update/", updateUserRoute, jsonTransformer);
             delete("/users/delete/", deleteUserRoute, jsonTransformer);
+            get("/users/calendar/:id", getUsersCalendar, jsonTransformer);
+            get("/users/investments/:id", getUsersInvestments, jsonTransformer);
             
             // Calendário
             post("/calendar/create/", createCalendarEventRoute, jsonTransformer);
@@ -125,6 +127,12 @@ public class App {
     public static Route searchAllInvestimentRoute = (request, response) -> {
         InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
         return investiment.get_all_investiment_history();
+    };
+
+    public static Route getUsersInvestments = (request, response) -> {
+        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
+        String id = request.params("id");
+        return investiment.get_users_investiment_history(id);
     };
 
     public static Route updateInvestmentRoute = (request, response) -> {
@@ -177,6 +185,12 @@ public class App {
         CalendarDAO calendar = new CalendarDAO();
         List<CalendarEventModel> calendarEvents = calendar.get_all_calendar_events();
         return calendarEvents;
+    };
+
+    public static Route getUsersCalendar = (request, response) -> {
+        CalendarDAO calendar = new CalendarDAO();
+        String id = request.params("id");
+        return calendar.get_user_calendar_events(id);
     };
 
     private static Route deleteUserRoute = (request, response) -> {
