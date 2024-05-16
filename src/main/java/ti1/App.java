@@ -89,22 +89,22 @@ public class App {
             post("/users/registration/", createUserRoute, jsonTransformer);
             put("/users/update/", updateUserRoute, jsonTransformer);
             delete("/users/delete/", deleteUserRoute, jsonTransformer);
-            get("/users/calendar/:id", getUsersCalendar, jsonTransformer);
-            get("/users/investments/:id", getUsersInvestments, jsonTransformer);
+            get("/users/calendar/:id/", getUsersCalendar, jsonTransformer);
+            get("/users/investments/:id/", getUsersInvestments, jsonTransformer);
             
             // Calendário
             post("/calendar/create/", createCalendarEventRoute, jsonTransformer);
             put("/calendar/update/", updateCalendarEventRoute, jsonTransformer);
             delete("/calendar/delete/", deleteCalendarEventRoute, jsonTransformer);
             get("/calendar/search/", searchAllCalendarEventRoute, jsonTransformer);
-            get("/calendar/search/:id", searchCalendarEventRoute, jsonTransformer);
+            get("/calendar/search/:id/", searchCalendarEventRoute, jsonTransformer);
             
             // Investimentos
             post("/investments/create/", createInvestmentRoute, jsonTransformer);
             put("/investments/update/", updateInvestmentRoute, jsonTransformer);
             delete("/investments/delete/", deleteInvestmentRoute, jsonTransformer);
             get("/investments/search/", searchAllInvestimentRoute, jsonTransformer);
-            get("/investments/search/:id", searchInvestmentRoute, jsonTransformer);
+            get("/investments/search/:id/", searchInvestmentRoute, jsonTransformer);
 
         
         });
@@ -144,9 +144,11 @@ public class App {
     };
 
     public static Route deleteInvestmentRoute = (request, response) -> {
-        InvestimentHistoryDAO investiment = new InvestimentHistoryDAO();
-        String id = request.params("id");
-        investiment.delete_investiment_history(id);
+        InvestimentHistoryDAO investimentDAO = new InvestimentHistoryDAO();
+        String post = request.body();
+        UserModel investment = new Gson().fromJson(post, UserModel.class);
+        investimentDAO.delete_investiment_history(investment.getId());
+        
         return "Investiment Deleted";
     };
 

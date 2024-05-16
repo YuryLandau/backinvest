@@ -46,11 +46,11 @@ public class InvestimentHistoryDAO extends DAO{
                 String user_id = rs.getString("user_id");
                 String date = rs.getString("date");
                 Number start_value = rs.getDouble("start_value");
-                Number end_value = rs.getDouble("end_value");
+                Number final_value = rs.getDouble("final_value");
                 Number monthly_income = rs.getDouble("monthly_income");
                 Number number_of_months = rs.getInt("number_of_months");
                 
-                InvestmentHistoryModel user = new InvestmentHistoryModel(id, user_id, date, start_value, end_value, monthly_income, number_of_months);
+                InvestmentHistoryModel user = new InvestmentHistoryModel(id, user_id, date, start_value, final_value, monthly_income, number_of_months);
                 investiment_history.add(user);
             }
 
@@ -75,11 +75,11 @@ public class InvestimentHistoryDAO extends DAO{
                 String id = rs.getString("id");
                 String date = rs.getString("date");
                 Number start_value = rs.getDouble("start_value");
-                Number end_value = rs.getDouble("end_value");
+                Number final_value = rs.getDouble("final_value");
                 Number monthly_income = rs.getDouble("monthly_income");
                 Number number_of_months = rs.getInt("number_of_months");
                 
-                InvestmentHistoryModel investiment = new InvestmentHistoryModel(id, user_id, date, start_value, end_value, monthly_income, number_of_months);
+                InvestmentHistoryModel investiment = new InvestmentHistoryModel(id, user_id, date, start_value, final_value, monthly_income, number_of_months);
                 investiment_history.add(investiment);
             };
 
@@ -102,11 +102,11 @@ public class InvestimentHistoryDAO extends DAO{
                 String user_id = rs.getString("user_id");
                 String date = rs.getString("date");
                 Number start_value = rs.getFloat("start_value");
-                Number end_value = rs.getFloat("end_value");
+                Number final_value = rs.getFloat("final_value");
                 Number monthly_income = rs.getFloat("monthly_income");
                 Number number_of_months = rs.getFloat("number_of_months");
                 
-                investiment_history = new InvestmentHistoryModel(id, user_id, date, start_value, end_value, monthly_income, number_of_months);;
+                investiment_history = new InvestmentHistoryModel(id, user_id, date, start_value, final_value, monthly_income, number_of_months);;
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -132,7 +132,7 @@ public class InvestimentHistoryDAO extends DAO{
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            String query = String.format("UPDATE %s SET user_id='%s', date='%s', start_value=%f, end_value=%f, monthly_income=%f, number_of_months=%f WHERE id='%s';", table_name, investiment_history.getUser_id(), investiment_history.getDate(), investiment_history.getStart_value(), investiment_history.getFinal_value(), investiment_history.getMonthly_income(), investiment_history.getNumber_of_months());
+            String query = String.format("UPDATE %s SET user_id='%s', date='%s', start_value=%s, final_value=%s, monthly_income=%s, number_of_months=%s WHERE id='%s';", table_name, investiment_history.getUser_id(), investiment_history.getDate(), investiment_history.getStart_value(), investiment_history.getFinal_value(), investiment_history.getMonthly_income(), investiment_history.getNumber_of_months(), investiment_history.getId());
             stmt.executeUpdate(query);
             System.out.println("Investiment History updated successfully.");
         } catch (Exception e) {
@@ -145,7 +145,7 @@ public class InvestimentHistoryDAO extends DAO{
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
-            String query = String.format("DELETE FROM %s WHERE id='%s';", table_name, id);
+            String query = String.format("DELETE FROM %s WHERE id=%s;", table_name, id);
             stmt.executeUpdate(query);
             System.out.println("Investiment History deleted successfully.");
         } catch (Exception e) {
