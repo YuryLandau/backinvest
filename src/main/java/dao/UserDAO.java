@@ -44,7 +44,7 @@ public class UserDAO extends DAO {
         return user;
     }
 
-    public List<UserModel> get_all_users( String table_name) {
+    public List<UserModel> get_all_users() {
         List<UserModel> users = new ArrayList<>();
         try {
             String query = String.format("SELECT * FROM %s;", table_name);
