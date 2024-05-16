@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Blog;
-import model.UserModel;
-
 public class DBFunctions {
     public Connection conect_to_db(String dbname, String username, String password) {
         Connection conn = null;
@@ -110,26 +108,6 @@ public class DBFunctions {
         }
     }
 
-    public void search_by_author(Connection conn, String table_name, String author) {
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            String query = String.format("SELECT * FROM %s WHERE author='%s';", table_name, author);
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(query);
-            System.out.println("Data read successfully.");
-            while (rs.next()) {
-                rs.getString("id");
-                rs.getString("title");
-                rs.getString("author");
-                rs.getString("content");
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
-    }
-
     public Blog search_by_id(Connection conn, String table_name, String id) {
         Blog blog = null;
         try {
@@ -150,19 +128,6 @@ public class DBFunctions {
             e.printStackTrace();
         }
         return blog;
-    }
-
-    public void delete_data_by_author(Connection conn, String table_name, String author) {
-        Statement stmt = null;
-        try {
-            String query = String.format("DELETE FROM %s WHERE author='%s';", table_name, author);
-            stmt = conn.createStatement();
-            stmt.executeUpdate(query);
-            System.out.println("Data deleted successfully.");
-        } catch (Exception e) {
-            System.out.println(e);
-            e.printStackTrace();
-        }
     }
 
     public void delete_data_by_id(Connection conn, String table_name, String id) {
