@@ -6,6 +6,8 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.put;
+import static spark.Spark.delete;
 import static spark.Spark.staticFiles;
 
 import com.google.gson.Gson;
@@ -80,10 +82,50 @@ public class App {
         path("/api/", () -> {
 
             // Autenticação
-            post("/login/", getUserRoute, jsonTransformer);
-            post("/users/", createUserRoute, jsonTransformer);
+            post("/users/login/", getUserRoute, jsonTransformer);
+            post("/users/registration/", createUserRoute, jsonTransformer);
+            put("/users/update/", updateUserRoute, jsonTransformer);
+            delete("/users/delete/", deleteUserRoute, jsonTransformer);
+            
+            // // Calendário
+            // post("/calendar/create/", createCalendarEventRoute, jsonTransformer);
+            // post("/calendar/update/", updateCalendarEventRoute, jsonTransformer);
+            // post("/calendar/delete/", deleteCalendarEventRoute, jsonTransformer);
+            // post("/calendar/search/", searchCalendarEventRoute, jsonTransformer);
+            // post("/calendar/search/by-date/", searchCalendarEventByDateRoute, jsonTransformer);
+
+            // // Investimentos
+            // post("/investments/create/", createInvestmentRoute, jsonTransformer);
+            // post("/investments/update/", updateInvestmentRoute, jsonTransformer);
+            // post("/investments/delete/", deleteInvestmentRoute, jsonTransformer);
+            // post("/investments/search/", searchInvestmentRoute, jsonTransformer);
+            // post("/investments/search/by-id/", searchInvestmentByIdRoute, jsonTransformer);
+            // post("/investments/search/by-user/", searchInvestmentByUserRoute, jsonTransformer);
+
+        
         });
     }
+
+    private static Route deleteUserRoute = (request, response) -> {
+        UserDAO userDAO = new UserDAO();
+        String post = request.body();
+        UserModel user = new Gson().fromJson(post, UserModel.class);
+        userDAO.delete_user(user.getId());
+        return "User Deleted";
+    };
+
+    private static Route updateUserRoute = (request, response) -> {
+        UserDAO userDAO = new UserDAO();
+        String post = request.body();
+        UserModel user = new Gson().fromJson(post, UserModel.class);
+        if (user.getFirstname().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
+            response.status(400);
+            return "Error: name, email and password are required.";
+        }
+
+        userDAO.update_user(user.getId(), user.getFirstname(), user.getLastname(), user.getCpf(), user.getPassword(), user.getEmail(), user.isAccept());
+        return "User Updated";
+    };
 
     private static Route createUserRoute = (request, response) -> {
         UserDAO userDAO = new UserDAO();

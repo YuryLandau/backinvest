@@ -145,5 +145,34 @@ public class UserDAO extends DAO {
         }
         return user;
     }
+
+    public void update_user(String id, String firstname, String lastname, String cpf, String email,
+    String password, boolean accept) {
+        Statement stmt = null;
+        try {
+            String query = String.format(
+                    "UPDATE users SET firstname='%s', lastname='%s', cpf='%s', password='%s', email='%s', accept=%s WHERE id=%s;",
+                    firstname, lastname, cpf, password, email, accept, id);
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            System.out.println("User updated successfully.");
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
+
+    public void delete_user(String id) {
+        Statement stmt = null;
+        try {
+            String query = String.format("DELETE FROM users WHERE id=%s;", id);
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            System.out.println("User deleted successfully.");
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    }
     
 }
