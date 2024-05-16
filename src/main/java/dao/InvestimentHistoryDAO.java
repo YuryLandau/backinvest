@@ -62,6 +62,34 @@ public class InvestimentHistoryDAO extends DAO{
         return investiment_history;
     }
 
+    public List<InvestmentHistoryModel> get_users_investiment_history(String user_id){
+        List<InvestmentHistoryModel> investiment_history = new ArrayList<>();
+        try {
+            String query = String.format("SELECT * FROM %s WHERE user_id='%s';", table_name, user_id);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            System.out.println("Data read successfully.");
+            
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String date = rs.getString("date");
+                Number start_value = rs.getFloat("start_value");
+                Number end_value = rs.getFloat("end_value");
+                Number monthly_income = rs.getFloat("monthly_income");
+                Number number_of_months = rs.getFloat("number_of_months");
+                
+                InvestmentHistoryModel investiment = new InvestmentHistoryModel(id, user_id, date, start_value, end_value, monthly_income, number_of_months);
+                investiment_history.add(investiment);
+            };
+
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+        return investiment_history;
+    }
+
     public InvestmentHistoryModel get_investiment_history(String id) {
         InvestmentHistoryModel investiment_history = new InvestmentHistoryModel();
         try {
