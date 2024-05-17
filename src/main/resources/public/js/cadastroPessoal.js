@@ -22,7 +22,8 @@ function salvaDados (dados) {
   localStorage.setItem ('db', JSON.stringify (dados));
 }
 
-function incluirCadastro (){
+function incluirCadastro (e){
+  e.preventDefault();
   // Ler dados do localStorage
   let objDados = leDados();
 
@@ -39,12 +40,21 @@ function incluirCadastro (){
   };
   objDados.cadastros.push (novoCadastro);
 
-  // Salvar os dados no localStorage Novamente
-  //if(passwordtwoValue === passwordValue) {
-    salvaDados(objDados);
 
-  // Atualiza os dados da tela
-  imprimeDados();
+  fetch("http://localhost:4567/api/users/registration/", {
+  method: "POST",
+  body: JSON.stringify({
+    password:strPassword,
+  email: strEmail,
+  firstname: strName,
+  lastname: strLastname,
+  cpf: "cpf",
+  accept: true
+}),
+  headers: {
+    "Content-type": "application/json; charset=UTF-8"
+  }
+})
 }
 
 function imprimeDados () {
